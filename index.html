@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER PUNK GAME</title>
+    <style>
+        /* 全局样式 - 超低资源赛博朋克风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Courier New", monospace;
+        }
+
+        body {
+            background-color: #0a0a1a;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            /* 极简渐变，无性能消耗 */
+            background: linear-gradient(135deg, #0a0a1a 0%, #121230 100%);
+        }
+
+        /* 霓虹标题 + 故障效果 */
+        .cyber-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 20px 0;
+            color: #00f0ff;
+            text-shadow: 
+                0 0 5px #00f0ff,
+                0 0 10px #00f0ff,
+                0 0 20px #ff00ff;
+            animation: glitch 3s infinite alternate;
+        }
+
+        /* 轻量故障动画，几乎不占资源 */
+        @keyframes glitch {
+            0%,100% { transform: translate(0); }
+            5% { transform: translate(2px, -2px); }
+        }
+
+        /* 副标题 */
+        .sub-title {
+            text-align: center;
+            color: #ff00ff;
+            margin-bottom: 40px;
+            text-shadow: 0 0 8px #ff00ff;
+        }
+
+        /* 游戏容器 - 霓虹边框 */
+        .game-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* 游戏卡片 - 赛博朋克样式 */
+        .game-card {
+            background: rgba(20, 20, 40, 0.8);
+            border: 2px solid #00f0ff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 15px #00f0ff, 0 0 25px rgba(255,0,255,0.3);
+            transition: 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px #ff00ff;
+        }
+
+        .game-card h2 {
+            color: #ff00ff;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 8px #ff00ff;
+        }
+
+        /* 游戏区域 - 轻量设计 */
+        .game-box {
+            width: 100%;
+            height: 250px;
+            background: #050510;
+            border: 1px solid #9d00ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
+            color: #00f0ff;
+        }
+
+        /* 按钮样式 */
+        .cyber-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid #00f0ff;
+            color: #00f0ff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .cyber-btn:hover {
+            background: #00f0ff;
+            color: #000;
+            box-shadow: 0 0 10px #00f0ff;
+        }
+
+        /* 底部文字 */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="cyber-title">CYBER GAME CENTER</h1>
+    <p class="sub-title">赛博朋克轻量游戏合集 | 低资源占用</p>
+
+    <div class="game-container">
+        <!-- 游戏1：霓虹反应测试 -->
+        <div class="game-card">
+            <h2>霓虹反应测试</h2>
+            <div class="game-box" id="game1">
+                <p>点击屏幕开始</p>
+                <p>变色后立刻点击</p>
+                <span id="result1" style="color:#ff00ff;">等待开始...</span>
+            </div>
+            <button class="cyber-btn" onclick="startGame1()">重新开始</button>
+        </div>
+
+        <!-- 游戏2：数字消除挑战 -->
+        <div class="game-card">
+            <h2>数字消除挑战</h2>
+            <div class="game-box" id="game2">
+                <div id="numberBox" style="font-size: 2rem; color:#ff00ff;">0</div>
+                <p>点击相同数字得分</p>
+                <span id="result2">分数：0</span>
+            </div>
+            <button class="cyber-btn" onclick="startGame2()">重新开始</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 CYBER PUNK | 纯原生轻量网页</p>
+    </footer>
+
+    <script>
+        // ==================== 游戏1：霓虹反应测试（超低资源） ====================
+        let game1Timer;
+        let game1Start = false;
+        const game1Box = document.getElementById('game1');
+        const result1 = document.getElementById('result1');
+
+        function startGame1() {
+            clearTimeout(game1Timer);
+            game1Box.style.background = '#050510';
+            result1.textContent = '准备中...';
+            game1Start = false;
+
+            // 随机延迟后变色
+            const delay = Math.random() * 2000 + 1000;
+            game1Timer = setTimeout(() => {
+                game1Box.style.background = '#ff00ff';
+                game1Start = true;
+                result1.textContent = '快点击！';
+                startTime = new Date().getTime();
+            }, delay);
+        }
+
+        game1Box.addEventListener('click', () => {
+            if (!game1Start) return;
+            const endTime = new Date().getTime();
+            const time = endTime - startTime;
+            result1.textContent = `反应时间：${time}ms`;
+            game1Box.style.background = '#050510';
+            game1Start = false;
+        });
+
+        // ==================== 游戏2：数字消除挑战（极简逻辑） ====================
+        let score = 0;
+        let lastNum = 0;
+        const numberBox = document.getElementById('numberBox');
+        const result2 = document.getElementById('result2');
+
+        function startGame2() {
+            score = 0;
+            lastNum = 0;
+            result2.textContent = `分数：${score}`;
+            changeNumber();
+        }
+
+        function changeNumber() {
+            const num = Math.floor(Math.random() * 5);
+            numberBox.textContent = num;
+            lastNum = num;
+        }
+
+        numberBox.addEventListener('click', () => {
+            score += 10;
+            result2.textContent = `分数：${score}`;
+            changeNumber();
+        });
+
+        // 初始化游戏
+        startGame1();
+        startGame2();
+    </script>
+</body>
+</html>
